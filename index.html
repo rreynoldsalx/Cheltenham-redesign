@@ -1032,6 +1032,9 @@ body.satellite .leaflet-tile-pane {
 #edit-export-btn:hover { background:#c8e6c9 !important; }
 #edit-rebuild-btn { background:#e3f2fd !important; border-color:#1565c0 !important; color:#1565c0 !important; font-weight:bold; }
 #edit-rebuild-btn:hover { background:#bbdefb !important; }
+#elev-tooltip { position:fixed; pointer-events:none; background:rgba(0,0,0,0.62);
+  color:#fff; font-size:12px; font-family:monospace; padding:3px 7px;
+  border-radius:4px; white-space:nowrap; display:none; z-index:2000; }
 </style>
 </head>
 <body>
@@ -2039,6 +2042,19 @@ map.on('mousemove', function(e) {
     var el = document.getElementById('edit-cursor-elev');
     if (el) el.textContent = elevStr;
   }
+  // Floating elevation tooltip — always visible while over the map
+  var tip = document.getElementById('elev-tooltip');
+  if (tip) {
+    tip.style.display = isNaN(elev) ? 'none' : 'block';
+    tip.textContent = elevStr;
+    tip.style.left = (e.originalEvent.clientX + 14) + 'px';
+    tip.style.top  = (e.originalEvent.clientY - 10) + 'px';
+  }
+});
+
+map.on('mouseout', function() {
+  var tip = document.getElementById('elev-tooltip');
+  if (tip) tip.style.display = 'none';
 });
 
 map.on('click', function(e) {
@@ -2435,5 +2451,6 @@ document.getElementById('prof-canvas').addEventListener('mouseleave', function()
 });
 
 </script>
+<div id="elev-tooltip"></div>
 </body>
 </html>
